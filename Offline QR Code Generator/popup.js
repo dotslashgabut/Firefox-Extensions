@@ -137,17 +137,29 @@ END:VCARD`;
 
     const qrData = getQRData(dataType);
 
-    qrcodeDiv.textContent = ''; // Clear existing content safely
-    qr = qrcode(0, 'M');
-    qr.addData(qrData);
-    qr.make();
+    // Clear existing content safely
+    qrcodeDiv.textContent = '';
     
-    const qrImage = new Image();
-    qrImage.src = qr.createDataURL(5);
-    qrImage.alt = 'QR Code';
-    qrcodeDiv.appendChild(qrImage);
+    // Use requestAnimationFrame to delay QR code generation
+    requestAnimationFrame(() => {
+      qr = qrcode(0, 'M');
+      qr.addData(qrData);
+      qr.make();
+      
+      const qrImage = new Image();
+      qrImage.src = qr.createDataURL(5);
+      qrImage.alt = 'QR Code';
+      qrImage.style.opacity = '0';
+      qrImage.style.transition = 'opacity 0.3s ease-in-out';
+      
+      qrcodeDiv.appendChild(qrImage);
 
-    qrPreview.style.display = 'block';
+      // Trigger reflow
+      qrcodeDiv.offsetHeight;
+
+      qrImage.style.opacity = '1';
+      qrPreview.style.display = 'block';
+    });
   });
 
   savePNGButton.addEventListener('click', function() {
