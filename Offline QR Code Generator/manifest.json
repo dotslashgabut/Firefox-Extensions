@@ -7,17 +7,17 @@
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "favicon.png",
-      "48": "favicon.png",
-      "128": "favicon.png"
+      "16": "favicon_16.png",
+      "48": "favicon_48.png",
+      "128": "favicon_128.png"
     }
   },
   "background": {
     "scripts": ["background.js"]
   },
   "icons": {
-    "16": "favicon.png",
-    "48": "favicon.png",
-    "128": "favicon.png"
+    "16": "favicon_16.png",
+    "48": "favicon_48.png",
+    "128": "favicon_128.png"
   }
 }

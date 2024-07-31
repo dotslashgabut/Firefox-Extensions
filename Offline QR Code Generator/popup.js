@@ -10,28 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   let qr = null;
 
-  const inputTemplates = {
-    text: '<input type="text" id="inputData" placeholder="Enter text">',
-    url: '<input type="url" id="inputData" placeholder="Enter URL">',
-    email: '<input type="email" id="inputData" placeholder="Enter email">',
-    phone: '<input type="tel" id="inputData" placeholder="Enter phone number">',
-    wifi: `
-      <input type="text" id="ssid" placeholder="SSID">
-      <input type="password" id="password" placeholder="Password">
-      <select id="encryption">
-        <option value="WPA">WPA/WPA2</option>
-        <option value="WEP">WEP</option>
-        <option value="nopass">No Encryption</option>
-      </select>
-    `,
-    contact: `
-      <input type="text" id="name" placeholder="Name">
-      <input type="tel" id="phone" placeholder="Phone">
-      <input type="email" id="email" placeholder="Email">
-      <input type="text" id="address" placeholder="Address">
-    `
-  };
-
   // Set default QR type to URL
   dataTypeSelect.value = 'url';
   updateInputFields();
@@ -49,7 +27,53 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function updateInputFields() {
     const dataType = dataTypeSelect.value;
-    inputFields.innerHTML = inputTemplates[dataType];
+    inputFields.textContent = ''; // Clear existing content safely
+    
+    const fragment = document.createDocumentFragment();
+    
+    const createInput = (type, id, placeholder) => {
+      const input = document.createElement('input');
+      input.type = type;
+      input.id = id;
+      input.placeholder = placeholder;
+      return input;
+    };
+    
+    switch (dataType) {
+      case 'text':
+        fragment.appendChild(createInput('text', 'inputData', 'Enter text'));
+        break;
+      case 'url':
+        fragment.appendChild(createInput('url', 'inputData', 'Enter URL'));
+        break;
+      case 'email':
+        fragment.appendChild(createInput('email', 'inputData', 'Enter email'));
+        break;
+      case 'phone':
+        fragment.appendChild(createInput('tel', 'inputData', 'Enter phone number'));
+        break;
+      case 'wifi':
+        fragment.appendChild(createInput('text', 'ssid', 'SSID'));
+        fragment.appendChild(createInput('password', 'password', 'Password'));
+        const select = document.createElement('select');
+        select.id = 'encryption';
+        ['WPA/WPA2', 'WEP', 'No Encryption'].forEach((option, index) => {
+          const optionElement = document.createElement('option');
+          optionElement.value = ['WPA', 'WEP', 'nopass'][index];
+          optionElement.textContent = option;
+          select.appendChild(optionElement);
+        });
+        fragment.appendChild(select);
+        break;
+      case 'contact':
+        fragment.appendChild(createInput('text', 'name', 'Name'));
+        fragment.appendChild(createInput('tel', 'phone', 'Phone'));
+        fragment.appendChild(createInput('email', 'email', 'Email'));
+        fragment.appendChild(createInput('text', 'address', 'Address'));
+        break;
+    }
+    
+    inputFields.appendChild(fragment);
     
     // If the data type is URL, try to auto-fill it
     if (dataType === 'url') {
@@ -113,12 +137,15 @@ END:VCARD`;
 
     const qrData = getQRData(dataType);
 
-    qrcodeDiv.innerHTML = '';
+    qrcodeDiv.textContent = ''; // Clear existing content safely
     qr = qrcode(0, 'M');
     qr.addData(qrData);
     qr.make();
     
-    qrcodeDiv.innerHTML = qr.createImgTag(5);
+    const qrImage = new Image();
+    qrImage.src = qr.createDataURL(5);
+    qrImage.alt = 'QR Code';
+    qrcodeDiv.appendChild(qrImage);
 
     qrPreview.style.display = 'block';
   });
