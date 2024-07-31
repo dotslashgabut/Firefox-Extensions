@@ -1,6 +1,6 @@
 # Firefox-Extensions
 
-Experiment code for Chrome extension.
+Experiment code for Firefox extension.
 
 To load the add-on temporarily in Firefox:
 
