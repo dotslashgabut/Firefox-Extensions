@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Offline QR Code Generator",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Generate and save QR codes with various data types",
   "permissions": ["activeTab", "downloads", "tabs", "storage"],
   "browser_action": {
